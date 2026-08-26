@@ -82,7 +82,8 @@
         </div>
     </header>
 
-    <!-- 3. О НАС -->
+    <!-- 3. О НАC -->
+    <!-- (Оставлено без изменений) -->
     <section id="about" class="py-20 px-4 max-w-7xl mx-auto">
         <h2 class="text-3xl font-bold text-center mb-12 uppercase tracking-wide">{% trans "О Нас" %}</h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -124,7 +125,6 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for branch in branches %}
-                <!-- Карточка каждого филиала теперь кликабельная и ведет на detail-страницу -->
                 <a href="{% url 'branch_detail' branch.pk %}" class="group relative rounded-2xl overflow-hidden cursor-pointer block border border-gray-800 hover:border-yellow-500/50 transition">
                     {% if branch.image %}
                         <img src="{{ branch.image.url }}" class="w-full h-80 object-cover group-hover:scale-110 transition duration-500" alt="{{ branch.name }}">
@@ -146,21 +146,13 @@
                     </div>
                 </a>
                 {% empty %}
-                <div class="group relative rounded-2xl overflow-hidden cursor-pointer block border border-gray-800">
-                    <img src="https://images.unsplash.com/photo-1555529733-0e67056058e3?q=80&w=600" class="w-full h-80 object-cover group-hover:scale-110 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
-                        <div>
-                            <h3 class="text-xl font-bold text-yellow-500 border-l-4 border-yellow-500 pl-3">{% trans "УЗБУМ ФИЛИАЛ" %}</h3>
-                        </div>
-                    </div>
-                </div>
+                <div class="text-center text-gray-500 col-span-3">{% trans "Филиалы пока не добавлены через базу данных." %}</div>
                 {% endfor %}
             </div>
         </div>
     </section>
 
-    <!-- 5. НАШИ АДРЕСА -->
+    <!-- 5. НАШИ АДРЕСА (ОБНОВЛЕНО 8 ФИЛИАЛОВ) -->
     <section id="addresses" class="py-20 px-4 max-w-7xl mx-auto">
         <h2 class="text-3xl font-bold text-center mb-4 uppercase tracking-wide">{% trans "Наши адреса" %}</h2>
         <p class="text-center text-gray-400 mb-12">{% trans "Найдите ближайший магазин Inbazar на карте." %}</p>
@@ -169,37 +161,126 @@
                 <div id="map" class="w-full h-full"></div>
             </div>
             <div class="lg:col-span-5 h-[400px] lg:h-[600px] overflow-y-auto custom-scrollbar pr-2 space-y-4">
-                {% for address in addresses %}
-                <div class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+
+                <!-- Филиал 1: Koratosh -->
+                <div onclick="focusMap(41.317144, 69.235626)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-bold text-yellow-500 flex items-center">
-                            <i class="fa-solid fa-location-dot mr-2"></i> {{ address.title }}
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "KORATOSH ФИЛИАЛ" %}
                         </h4>
-                        <div class="flex space-x-2 text-xl">
+                        <a href="https://yandex.uz/maps/org/87464722311/?ll=69.235626%2C41.317144&mode=search&sctx=ZAAAAAgBEAAaKAoSCcueBDbnUVFAERGPxMvTp0RAEhIJTl5kAn6N3z8R1F%2BvsOB%2BzD8iBgABAgMEBSgKOABA31BIAWoCdXqdAc3MTD2gAQCoAQC9AaEWCWLCARGH%2F7bqxQLioa3DqAP6toyrTeoBAPIBAPgBAIICB2luYmF6YXKKAgCSAgCaAgxkZXNrdG9wLW1hcHM%3D&sll=69.235626%2C41.317144&sspn=0.015407%2C0.006956&text=inbazar&z=17" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
                             <i class="fa-solid fa-map-location-dot text-red-500"></i>
-                        </div>
+                        </a>
                     </div>
-                    <p class="text-sm text-white">{{ address.address }}</p>
-                    {% if address.landmark %}
-                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {{ address.landmark }}</p>
-                    {% endif %}
+                    <p class="text-sm text-white">{% trans "Ташкент, Шайхантахурский район, массив Караташ, 3" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Samarkand darvoza makro ro'parasida" %}</p>
                 </div>
-                {% empty %}
-                <div class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+
+                <!-- Филиал 2: Sergeli -->
+                <div onclick="focusMap(41.229107, 69.213279)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-bold text-yellow-500 flex items-center">
-                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "УЗБУМ ФИЛИАЛ" %}
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "SERGELI ФИЛИАЛ" %}
                         </h4>
+                        <a href="https://yandex.ru/maps/-/CHgEBU-k" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
                     </div>
-                    <p class="text-sm text-white">{% trans "г. Ташкент, Яшнабадский р-н, ул. УзБум, 12" %}</p>
-                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Напротив завода УзБум" %}</p>
+                    <p class="text-sm text-white">{% trans "Ташкент, Сергелийский район, махаллинский сход граждан Янги Бунёдобод" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Sergeli Moshina Bozor, Inomarka katorni ruparasida" %}</p>
                 </div>
-                {% endfor %}
+
+                <!-- Филиал 3: Beruniy -->
+                <div onclick="focusMap(41.341852, 69.211429)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "BERUNIY ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.ru/maps/-/CHgEJYYP" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-white">{% trans "улица Беруни, 41, Ташкент" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Akfa Medlayn ro‘parasi, Xuvaydo mebel uyi o‘rnida" %}</p>
+                </div>
+
+                <!-- Филиал 4: Qorasuv -->
+                <div onclick="focusMap(41.330894, 69.349079)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "QORASUV ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.uz/maps/-/CDh37Lp5" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-white">{% trans "Ташкент, Мирзо-Улугбекский район, массив Карасу, 1-й квартал, 24В" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "DUNYO Toʻyxonasi ro'parasida, Korzinka 2-qavatida" %}</p>
+                </div>
+
+                <!-- Филиал 5: Yunusabod -->
+                <div onclick="focusMap(41.346338, 69.287232)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "YUNUSABOD ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.uz/maps/-/CDh~A6Zk" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-white">{% trans "Ташкент, Юнусабадский район, ул. Ифтихор, 1" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Telebashnya, Besh kozonning yonida" %}</p>
+                </div>
+
+                <!-- Филиал 6: Yashnobod -->
+                <div onclick="focusMap(41.282928, 69.329712)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "YASHNOBOD ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.ru/maps/-/CHgEeMkg" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <!-- Обновил адрес на корректный для этого района (так как в твоем тексте дублировался адрес Караташа) -->
+                    <p class="text-sm text-white">{% trans "Ташкент, Яшнабадский район, улица Джаркурган" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Kadisheva Djarkurgan kuchasi, AJOU universiteti ruparasi" %}</p>
+                </div>
+
+                <!-- Филиал 7: Nukus -->
+                <div onclick="focusMap(42.457850, 59.610531)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "NUKUS ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.uz/maps/-/CLfUaF4M" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-white">{% trans "улица Аллаяра Досназарова, 8V, Нукус, Республика Каракалпакстан" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Dosnazarov koʻchasi 8-a, Vogzaldan kelvurishda Medical senterning yonida!" %}</p>
+                </div>
+
+                <!-- Филиал 8: TTZ -->
+                <div onclick="focusMap(41.353393, 69.362947)" class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "TTZ ФИЛИАЛ" %}
+                        </h4>
+                        <a href="https://yandex.uz/maps/-/CDh~EDns" target="_blank" class="flex space-x-2 text-xl hover:scale-110 transition">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-white">{% trans "улица Гульсанам, Ташкент" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Diadora korzinkani yonida" %}</p>
+                </div>
+
             </div>
         </div>
     </section>
 
     <!-- 6. СВЯЗАТЬСЯ С НАМИ -->
+    <!-- (Оставлено без изменений) -->
     <section id="contact" class="py-20 px-4 relative overflow-hidden">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -266,20 +347,26 @@
         </div>
     </footer>
 
-    <!-- Скрипты -->
+    <!-- Скрипты для 8 меток на карте -->
     <script type="text/javascript">
+        var myMap;
         ymaps.ready(init);
         function init(){
-            var myMap = new ymaps.Map("map", {
-                center: [41.311081, 69.240562],
+            myMap = new ymaps.Map("map", {
+                center: [41.311081, 69.240562], // Центр Ташкента
                 zoom: 11,
                 controls: ['zoomControl']
             });
 
             var points = [
-                { coords: [41.288220, 69.308722], name: '{% trans "УЗБУМ ФИЛИАЛ" %}' },
-                { coords: [41.317585, 69.231245], name: '{% trans "КАРАТАШ ФИЛИАЛ" %}' },
-                { coords: [41.229107, 69.213279], name: '{% trans "СЕРГЕЛИ ФИЛИАЛ" %}' }
+                { coords: [41.317144, 69.235626], name: '{% trans "KORATOSH ФИЛИАЛ" %}' },
+                { coords: [41.229107, 69.213279], name: '{% trans "SERGELI ФИЛИАЛ" %}' },
+                { coords: [41.341852, 69.211429], name: '{% trans "BERUNIY ФИЛИАЛ" %}' },
+                { coords: [41.330894, 69.349079], name: '{% trans "QORASUV ФИЛИАЛ" %}' },
+                { coords: [41.346338, 69.287232], name: '{% trans "YUNUSABOD ФИЛИАЛ" %}' },
+                { coords: [41.282928, 69.329712], name: '{% trans "YASHNOBOD ФИЛИАЛ" %}' },
+                { coords: [42.457850, 59.610531], name: '{% trans "NUKUS ФИЛИАЛ" %}' },
+                { coords: [41.353393, 69.362947], name: '{% trans "TTZ ФИЛИАЛ" %}' }
             ];
 
             points.forEach(function(point) {
@@ -290,6 +377,117 @@
                 myMap.geoObjects.add(placemark);
             });
         }
+
+        // Функция для центрирования карты при клике на адрес в списке
+        function focusMap(lat, lon) {
+            if (myMap) {
+                myMap.setCenter([lat, lon], 16, { duration: 400 });
+            }
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Koratosh
+
+Ташкент, Шайхантахурский район, массив Караташ, 3
+
+Samarkand darvoza makro ro'parasida
+
+https://yandex.uz/maps/org/87464722311/?ll=69.235626%2C41.317144&mode=search&sctx=ZAAAAAgBEAAaKAoSCcueBDbnUVFAERGPxMvTp0RAEhIJTl5kAn6N3z8R1F%2BvsOB%2BzD8iBgABAgMEBSgKOABA31BIAWoCdXqdAc3MTD2gAQCoAQC9AaEWCWLCARGH%2F7bqxQLioa3DqAP6toyrTeoBAPIBAPgBAIICB2luYmF6YXKKAgCSAgCaAgxkZXNrdG9wLW1hcHM%3D&sll=69.235626%2C41.317144&sspn=0.015407%2C0.006956&text=inbazar&z=17
+
+
+
+Sergeli
+
+Ташкент, Сергелийский район, махаллинский сход граждан Янги Бунёдобод
+
+Sergeli Moshina Bozor, Inomarka katorni ruparasida
+
+https://yandex.ru/maps/-/CHgEBU-k
+
+
+
+Beruniy
+
+улица Беруни, 41, Ташкент
+
+Akfa Medlayn ro‘parasi, Xuvaydo mebel uyi o‘rnida
+
+https://yandex.ru/maps/-/CHgEJYYP
+
+
+
+Qorasuv.
+
+Ташкент, Мирзо-Улугбекский район, массив Карасу, 1-й квартал, 24В
+
+DUNYO Toʻyxonasi ro'parasida, Korzinka 2-qavatida
+
+https://yandex.uz/maps/-/CDh37Lp5
+
+
+
+Yunusabod
+
+Ташкент, Юнусабадский район, ул. Ифтихор, 1
+
+    Telebashnya, Besh kozonning yonida.
+
+https://yandex.uz/maps/-/CDh~A6Zk
+
+
+
+Yashnobod
+
+Ташкент, Шайхантахурский район, массив Караташ, 3
+
+Kadisheva Djarkurgan kuchasi, AJOU universiteti ruparasi
+
+https://yandex.ru/maps/-/CHgEeMkg
+
+
+
+Qoraqalpogʻiston Nukus
+
+улица Аллаяра Досназарова, 8V, Нукус, Республика Каракалпакстан
+
+Dosnazarov koʻchasi 8-a, Vogzaldan kelvurishda Medical senterning yonida!
+
+https://yandex.uz/maps/-/CLfUaF4M Я сейчас тебе скину base@gmail.
+
+
+
+TTZ
+
+улица Гульсанам, Ташкент
+
+Diadora korzinkani yonida
+
+https://yandex.uz/maps/-/CDh~EDns
+
