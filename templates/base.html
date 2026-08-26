@@ -1,0 +1,295 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Inbazar - Сеть магазинов" %}</title>
+    <!-- Подключаем Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключаем иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Подключаем API Яндекс Карт -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+<body class="bg-[#121212] text-white font-sans antialiased">
+
+    <!-- 1. ФИКСИРОВАННАЯ ПАНЕЛЬ НАВИГАЦИИ -->
+    <nav class="fixed top-4 left-1/2 transform -translate-x-1/2 w-[95%] max-w-7xl z-50 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-lg transition-all">
+        <!-- Логотип -->
+        <a href="#" class="text-2xl font-bold tracking-wider text-yellow-500">IN<span class="text-white">BAZAR</span></a>
+
+        <!-- Ссылки -->
+        <div class="hidden md:flex space-x-6 text-sm font-medium">
+            <a href="#about" class="hover:text-yellow-400 transition">{% trans "О нас" %}</a>
+            <a href="#branches" class="hover:text-yellow-400 transition">{% trans "Филиалы" %}</a>
+            <a href="#addresses" class="hover:text-yellow-400 transition">{% trans "Адреса" %}</a>
+            <a href="#contact" class="hover:text-yellow-400 transition">{% trans "Связаться с нами" %}</a>
+        </div>
+
+        <!-- Переключатель языка -->
+        <div class="flex items-center">
+            <div class="relative group">
+                <button class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center border border-gray-600 hover:border-white transition overflow-hidden">
+                    <i class="fa-solid fa-globe text-gray-300"></i>
+                </button>
+
+                <div class="absolute right-0 mt-2 w-40 bg-gray-900 border border-gray-700 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                    <form action="{% url 'set_language' %}" method="post" class="m-0 p-0">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <button type="submit" name="language" value="ru" class="w-full flex items-center px-4 py-3 hover:bg-gray-800 transition text-sm">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="RU" class="w-5 h-5 rounded-full object-cover mr-3 border border-gray-600"> Русский
+                        </button>
+                        <button type="submit" name="language" value="uz" class="w-full flex items-center px-4 py-3 hover:bg-gray-800 transition text-sm border-t border-gray-800">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Flag_of_Uzbekistan.svg" alt="UZ" class="w-5 h-5 rounded-full object-cover mr-3 border border-gray-600"> O'zbekcha
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. ГЛАВНЫЙ ЭКРАН -->
+    <header class="relative h-screen w-full bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1920')] bg-cover bg-center">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 flex flex-col justify-center h-full px-10 max-w-7xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-yellow-500 uppercase">{% trans "INBAZAR" %}</h1>
+            <h2 class="text-2xl md:text-4xl font-bold mb-6">{% trans "СЕТЬ МАГАЗИНОВ ДЛЯ ВСЕЙ СЕМЬИ" %}</h2>
+            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">{% trans "Одежда, обувь и аксессуары по доступным ценам. Крупнейшая розничная сеть в Узбекистане." %}</p>
+            <div>
+                <a href="#addresses" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 inline-block">
+                    {% trans "Найти ближайший магазин" %}
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. О НАС -->
+    <section id="about" class="py-20 px-4 max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12 uppercase tracking-wide">{% trans "О Нас" %}</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="rounded-2xl overflow-hidden relative group">
+                <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=800" alt="Магазин внутри" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <button class="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-yellow-500/80 transition">
+                        <i class="fa-solid fa-play text-2xl text-white"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-800/80 p-6 rounded-2xl flex flex-col justify-between border border-gray-700 hover:border-yellow-500 transition">
+                    <p class="text-gray-400 text-sm">{% trans "Филиалы" %}</p>
+                    <p class="text-3xl font-bold mt-2">15+</p>
+                </div>
+                <div class="bg-gray-800/80 p-6 rounded-2xl flex flex-col justify-between border border-gray-700 hover:border-yellow-500 transition">
+                    <p class="text-gray-400 text-sm">{% trans "Сотрудники" %}</p>
+                    <p class="text-3xl font-bold mt-2">50+</p>
+                </div>
+                <div class="bg-gray-800/80 p-6 rounded-2xl flex flex-col justify-between border border-gray-700 hover:border-yellow-500 transition">
+                    <p class="text-gray-400 text-sm">{% trans "Режим работы" %}</p>
+                    <p class="text-xl font-bold mt-2">09:00 - 23:00</p>
+                    <p class="text-xs text-gray-500 mt-1">{% trans "Без выходных" %}</p>
+                </div>
+                <div class="bg-gray-800/80 p-6 rounded-2xl flex flex-col justify-between border border-gray-700 hover:border-yellow-500 transition">
+                    <p class="text-gray-400 text-sm">{% trans "Категории товаров" %}</p>
+                    <p class="text-3xl font-bold mt-2">20+</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. НАШИ ФИЛИАЛЫ -->
+    <section id="branches" class="py-20 bg-gray-900/50 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4 uppercase tracking-wide">{% trans "Наши филиалы" %}</h2>
+            <p class="text-center text-gray-400 mb-12">{% trans "В настоящее время у нас есть филиалы по всему городу Ташкент, а также в республике Каракалпакистан Нукус." %}</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for branch in branches %}
+                <!-- Карточка каждого филиала теперь кликабельная и ведет на detail-страницу -->
+                <a href="{% url 'branch_detail' branch.pk %}" class="group relative rounded-2xl overflow-hidden cursor-pointer block border border-gray-800 hover:border-yellow-500/50 transition">
+                    {% if branch.image %}
+                        <img src="{{ branch.image.url }}" class="w-full h-80 object-cover group-hover:scale-110 transition duration-500" alt="{{ branch.name }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1555529733-0e67056058e3?q=80&w=600" class="w-full h-80 object-cover group-hover:scale-110 transition duration-500" alt="{{ branch.name }}">
+                    {% endif %}
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
+                        <div>
+                            <h3 class="text-xl font-bold text-yellow-500 border-l-4 border-yellow-500 pl-3">{{ branch.name|upper }}</h3>
+                            {% if branch.address %}
+                            <p class="text-xs text-gray-300 mt-2 pl-3 line-clamp-1"><i class="fa-solid fa-location-dot mr-1 text-yellow-500"></i> {{ branch.address }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="bg-black/70 backdrop-blur-md px-3 py-2 rounded-xl text-xs border border-gray-600 group-hover:bg-yellow-500 group-hover:text-black transition">
+                            <i class="fa-solid fa-circle-info mr-1"></i> {% trans "Подробнее" %}
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="group relative rounded-2xl overflow-hidden cursor-pointer block border border-gray-800">
+                    <img src="https://images.unsplash.com/photo-1555529733-0e67056058e3?q=80&w=600" class="w-full h-80 object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
+                        <div>
+                            <h3 class="text-xl font-bold text-yellow-500 border-l-4 border-yellow-500 pl-3">{% trans "УЗБУМ ФИЛИАЛ" %}</h3>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. НАШИ АДРЕСА -->
+    <section id="addresses" class="py-20 px-4 max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-4 uppercase tracking-wide">{% trans "Наши адреса" %}</h2>
+        <p class="text-center text-gray-400 mb-12">{% trans "Найдите ближайший магазин Inbazar на карте." %}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-gray-900 rounded-3xl p-4 md:p-6 border border-gray-800">
+            <div class="lg:col-span-7 h-[400px] lg:h-[600px] rounded-2xl overflow-hidden relative">
+                <div id="map" class="w-full h-full"></div>
+            </div>
+            <div class="lg:col-span-5 h-[400px] lg:h-[600px] overflow-y-auto custom-scrollbar pr-2 space-y-4">
+                {% for address in addresses %}
+                <div class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {{ address.title }}
+                        </h4>
+                        <div class="flex space-x-2 text-xl">
+                            <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-white">{{ address.address }}</p>
+                    {% if address.landmark %}
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {{ address.landmark }}</p>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <div class="bg-gray-800 p-5 rounded-xl hover:bg-gray-700 transition cursor-pointer border border-transparent hover:border-yellow-500/50">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-yellow-500 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-2"></i> {% trans "УЗБУМ ФИЛИАЛ" %}
+                        </h4>
+                    </div>
+                    <p class="text-sm text-white">{% trans "г. Ташкент, Яшнабадский р-н, ул. УзБум, 12" %}</p>
+                    <p class="text-xs text-gray-400 mt-1">{% trans "Ориентир:" %} {% trans "Напротив завода УзБум" %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. СВЯЗАТЬСЯ С НАМИ -->
+    <section id="contact" class="py-20 px-4 relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest drop-shadow-lg">{% trans "Связаться с нами" %}</h2>
+                <p class="text-gray-400 mt-4 text-lg">{% trans "Следите за нашими новостями и скидками в социальных сетях!" %}</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Telegram -->
+                <a href="https://t.me/inbazarUz" target="_blank" class="group relative h-48 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex flex-col items-center justify-center transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(56,189,248,0.5)] hover:border-sky-400/50 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-sky-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <i class="fa-brands fa-telegram text-5xl text-gray-400 group-hover:text-sky-400 transition-colors duration-500 z-10 mb-4"></i>
+                    <span class="text-gray-300 font-medium z-10 tracking-wide group-hover:text-white transition-colors">Telegram</span>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/inbazar.uz/" target="_blank" class="group relative h-48 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex flex-col items-center justify-center transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(236,72,153,0.5)] hover:border-pink-500/50 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-orange-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <i class="fa-brands fa-instagram text-5xl text-gray-400 group-hover:text-pink-500 transition-colors duration-500 z-10 mb-4"></i>
+                    <span class="text-gray-300 font-medium z-10 tracking-wide group-hover:text-white transition-colors">Instagram</span>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/inbazar.uzb" target="_blank" class="group relative h-48 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex flex-col items-center justify-center transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.5)] hover:border-blue-500/50 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <i class="fa-brands fa-facebook-f text-5xl text-gray-400 group-hover:text-blue-500 transition-colors duration-500 z-10 mb-4"></i>
+                    <span class="text-gray-300 font-medium z-10 tracking-wide group-hover:text-white transition-colors">Facebook</span>
+                </a>
+
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@inbazaruz" target="_blank" class="group relative h-48 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex flex-col items-center justify-center transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(239,68,68,0.5)] hover:border-red-500/50 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <i class="fa-brands fa-youtube text-5xl text-gray-400 group-hover:text-red-500 transition-colors duration-500 z-10 mb-4"></i>
+                    <span class="text-gray-300 font-medium z-10 tracking-wide group-hover:text-white transition-colors">YouTube</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. ПЛАВАЮЩАЯ КНОПКА ТЕЛЕФОНА -->
+    <div class="fixed bottom-8 right-8 z-50 group flex flex-col items-end">
+        <div class="absolute bottom-20 right-0 w-max bg-gray-900/95 backdrop-blur-md border border-gray-700 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col overflow-hidden transform translate-y-4 group-hover:translate-y-0">
+            <a href="tel:+998787777707" class="px-6 py-4 hover:bg-gray-800 text-white font-medium flex items-center transition border-b border-gray-700/50">
+                <i class="fa-solid fa-phone mr-3 text-green-500"></i> +998 (90) 946 94 94
+            </a>
+            <a href="tel:+998901234567" class="px-6 py-4 hover:bg-gray-800 text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-phone mr-3 text-green-500"></i> +998 (97) 013 88 88
+            </a>
+        </div>
+
+        <div class="w-16 h-16 bg-[#3f8c51] text-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(63,140,81,0.4)] cursor-pointer relative transition-transform transform group-hover:scale-110 border border-green-400/30">
+            <span class="absolute inset-0 rounded-full bg-green-500 opacity-30 animate-ping"></span>
+            <i class="fa-solid fa-phone text-2xl relative z-10"></i>
+        </div>
+    </div>
+
+    <!-- 8. ФУТЕР -->
+    <footer class="bg-black py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <a href="#" class="text-2xl font-bold tracking-wider text-yellow-500 inline-block mb-2">IN<span class="text-white">BAZAR</span></a>
+            <p class="text-gray-500 text-sm">© 2026 {% trans "Все права защищены. Разработано специально для Inbazar." %}</p>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var myMap = new ymaps.Map("map", {
+                center: [41.311081, 69.240562],
+                zoom: 11,
+                controls: ['zoomControl']
+            });
+
+            var points = [
+                { coords: [41.288220, 69.308722], name: '{% trans "УЗБУМ ФИЛИАЛ" %}' },
+                { coords: [41.317585, 69.231245], name: '{% trans "КАРАТАШ ФИЛИАЛ" %}' },
+                { coords: [41.229107, 69.213279], name: '{% trans "СЕРГЕЛИ ФИЛИАЛ" %}' }
+            ];
+
+            points.forEach(function(point) {
+                var placemark = new ymaps.Placemark(point.coords, {
+                    hintContent: point.name,
+                    balloonContent: '<b>' + point.name + '</b>'
+                }, { preset: 'islands#yellowDotIcon' });
+                myMap.geoObjects.add(placemark);
+            });
+        }
+    </script>
+</body>
+</html>

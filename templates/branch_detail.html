@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ branch.name }} - Inbazar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-950 text-white font-sans min-h-screen py-10 px-4">
+
+    <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+        <!-- Большое фото филиала -->
+        {% if branch.photo %}
+            <img src="{{ branch.photo.url }}" class="w-full h-96 object-cover" alt="{{ branch.name }}">
+        {% endif %}
+        
+        <div class="p-8">
+            <a href="{% url 'home' %}" class="inline-block mb-6 text-yellow-500 hover:underline">
+                <i class="fa-solid fa-arrow-left mr-2"></i> На главную
+            </a>
+
+            <h1 class="text-3xl font-bold text-yellow-500 mb-6 border-l-4 border-yellow-500 pl-4">{{ branch.name }}</h1>
+
+            <div class="space-y-4 text-lg">
+                <p><strong class="text-gray-400"><i class="fa-solid fa-location-dot mr-2 text-yellow-500"></i> Точный адрес:</strong> {{ branch.address }}</p>
+                
+                {% if branch.landmark %}
+                    <p><strong class="text-gray-400"><i class="fa-solid fa-compass mr-2 text-yellow-500"></i> Ориентир:</strong> {{ branch.landmark }}</p>
+                {% endif %}
+            </div>
+
+            {% if branch.map_link %}
+                <div class="mt-8">
+                    <a href="{{ branch.map_link }}" target="_blank" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-6 py-3 rounded-xl transition shadow-lg">
+                        <i class="fa-solid fa-map-location-dot mr-2"></i> Посмотреть на карте
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
